@@ -148,9 +148,5 @@ app.get('/api/dashboard', need(), wrap(async (req, res) => {
     totalUsers: await User.countDocuments({ role: 'student' })
   });
 }));
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`StudyCircle running at http://localhost:${PORT}`));
