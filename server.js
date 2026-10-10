@@ -45,7 +45,7 @@ const upload = multer({
 const app = express();
 app.use(express.json());
 app.use(session({ secret: 'studycircle-secret-change-me', resave: false, saveUninitialized: false }));
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'public')));
 const need = role => (req, res, next) => {
   if (!req.session.user) return res.status(401).json({ error: 'Please log in first.' });
   if (role && req.session.user.role !== role) return res.status(403).json({ error: `Only an ${role} can do this.` });
@@ -148,5 +148,9 @@ app.get('/api/dashboard', need(), wrap(async (req, res) => {
     totalUsers: await User.countDocuments({ role: 'student' })
   });
 }));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => console.log(`StudyCircle running at http://localhost:${PORT}`));
